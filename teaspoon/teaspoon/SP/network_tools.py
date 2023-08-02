@@ -34,8 +34,9 @@ def shortest_path(A, weighted_path_lengths=False):
         G = nx.from_numpy_matrix(A_sp)
         lengths = dict(nx.all_pairs_shortest_path_length(G))
         for i in range(N):
-            for j in range(N):
-                D[i][j] = lengths[i][j]
+            for j in range(i+1, N):
+                D[i][j] = lengths.get(i, {}).get(j, np.inf)
+        D = D + D.T
         return D
 
     else:
