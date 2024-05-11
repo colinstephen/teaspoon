@@ -2,10 +2,10 @@ name: Publish Python Distributions to TestPyPI
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "test_release" branch
-  push:
-    branches: [ "test_release" ]
-
+  workflow_run:
+    workflows: [Test Installs]
+    types:
+      - completed
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -23,19 +23,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: "3.10"
+          python-version: "3.11"
       - name: Install pypa/build
         run: >-
           python -m
           pip install
           build
           --user
-      - name: Install boost package for testing
-        run: sudo apt-get install libboost-all-dev
-      - name: Install cmake
-        run: sudo apt-get install cmake
-      - name: Install cubical ripser
-        run: pip install -U git+https://github.com/shizuo-kaji/CubicalRipser_3dim
       - name: Install teaspoon for testing
         run: pip install .
       - name: Run tests
